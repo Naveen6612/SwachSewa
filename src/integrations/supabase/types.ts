@@ -14,7 +14,266 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      green_champions: {
+        Row: {
+          appointed_at: string | null
+          area_assigned: string
+          id: string
+          is_active: boolean | null
+          responsibilities: string[] | null
+          user_id: string
+        }
+        Insert: {
+          appointed_at?: string | null
+          area_assigned: string
+          id?: string
+          is_active?: boolean | null
+          responsibilities?: string[] | null
+          user_id: string
+        }
+        Update: {
+          appointed_at?: string | null
+          area_assigned?: string
+          id?: string
+          is_active?: boolean | null
+          responsibilities?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      incentives: {
+        Row: {
+          awarded_by: string | null
+          created_at: string | null
+          id: string
+          points: number | null
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          awarded_by?: string | null
+          created_at?: string | null
+          id?: string
+          points?: number | null
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          awarded_by?: string | null
+          created_at?: string | null
+          id?: string
+          points?: number | null
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string | null
+          full_name: string
+          id: string
+          is_verified: boolean | null
+          phone: string | null
+          pincode: string | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          state: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name: string
+          id?: string
+          is_verified?: boolean | null
+          phone?: string | null
+          pincode?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          state?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          is_verified?: boolean | null
+          phone?: string | null
+          pincode?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          state?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      training_modules: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_mandatory: boolean | null
+          target_role: Database["public"]["Enums"]["user_role"]
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_mandatory?: boolean | null
+          target_role: Database["public"]["Enums"]["user_role"]
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_mandatory?: boolean | null
+          target_role?: Database["public"]["Enums"]["user_role"]
+          title?: string
+        }
+        Relationships: []
+      }
+      training_progress: {
+        Row: {
+          completed_at: string | null
+          id: string
+          module_id: string
+          score: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["training_status"] | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          id?: string
+          module_id: string
+          score?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["training_status"] | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          id?: string
+          module_id?: string
+          score?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["training_status"] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      waste_facilities: {
+        Row: {
+          address: string
+          capacity_tons: number | null
+          city: string
+          contact_person: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          phone: string | null
+          type: Database["public"]["Enums"]["facility_type"]
+        }
+        Insert: {
+          address: string
+          capacity_tons?: number | null
+          city: string
+          contact_person?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          phone?: string | null
+          type: Database["public"]["Enums"]["facility_type"]
+        }
+        Update: {
+          address?: string
+          capacity_tons?: number | null
+          city?: string
+          contact_person?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          phone?: string | null
+          type?: Database["public"]["Enums"]["facility_type"]
+        }
+        Relationships: []
+      }
+      waste_reports: {
+        Row: {
+          assigned_to: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          latitude: number | null
+          location: string
+          longitude: number | null
+          photo_url: string | null
+          reporter_id: string
+          resolved_at: string | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location: string
+          longitude?: number | null
+          photo_url?: string | null
+          reporter_id: string
+          resolved_at?: string | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          latitude?: number | null
+          location?: string
+          longitude?: number | null
+          photo_url?: string | null
+          reporter_id?: string
+          resolved_at?: string | null
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +282,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      facility_type:
+        | "biomethanization"
+        | "waste_to_energy"
+        | "recycling"
+        | "scrap_collection"
+      training_status: "not_started" | "in_progress" | "completed"
+      user_role: "citizen" | "waste_worker" | "green_champion" | "admin"
+      waste_type: "dry" | "wet" | "hazardous"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +416,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      facility_type: [
+        "biomethanization",
+        "waste_to_energy",
+        "recycling",
+        "scrap_collection",
+      ],
+      training_status: ["not_started", "in_progress", "completed"],
+      user_role: ["citizen", "waste_worker", "green_champion", "admin"],
+      waste_type: ["dry", "wet", "hazardous"],
+    },
   },
 } as const
