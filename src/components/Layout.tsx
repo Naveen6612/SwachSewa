@@ -1,41 +1,41 @@
-import { useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarHeader, 
+import { useState } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
   SidebarFooter,
   SidebarProvider,
   SidebarTrigger,
   SidebarMenuButton,
   SidebarMenu,
-  SidebarMenuItem
-} from '@/components/ui/sidebar';
-import { 
-  BookOpen, 
-  MapPin, 
-  FileText, 
-  Trophy, 
-  Users, 
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import {
+  BookOpen,
+  MapPin,
+  FileText,
+  Trophy,
+  Users,
   Settings,
   LogOut,
   Leaf,
   Recycle,
   Camera,
-  Building
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Building,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navigationItems = [
-  { name: 'Dashboard', href: '/', icon: BookOpen },
-  { name: 'Training', href: '/training', icon: BookOpen },
-  { name: 'Report Waste', href: '/report', icon: Camera },
-  { name: 'Facilities', href: '/facilities', icon: Building },
-  { name: 'Green Champions', href: '/champions', icon: Users },
-  { name: 'Incentives', href: '/incentives', icon: Trophy },
-  { name: 'Profile', href: '/profile', icon: Settings },
+  { name: "Dashboard", href: "/", icon: BookOpen },
+  { name: "Training", href: "/training", icon: BookOpen },
+  { name: "Report Waste", href: "/report", icon: Camera },
+  { name: "Facilities", href: "/facilities", icon: Building },
+  // { name: "Green Champions", href: "/champions", icon: Users },
+  { name: "Incentives", href: "/incentives", icon: Trophy },
+  { name: "Profile", href: "/profile", icon: Settings },
 ];
 
 export default function Layout() {
@@ -64,15 +64,20 @@ export default function Layout() {
                 <Leaf className="h-5 w-5 text-primary-foreground" />
               </div>
               <Recycle className="h-5 w-5 text-primary" />
-              <span className="font-bold text-sidebar-foreground">Green Factory</span>
+              <span className="font-bold text-sidebar-foreground">
+                Swach Sewa
+              </span>
             </div>
           </SidebarHeader>
-          
+
           <SidebarContent className="p-4">
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild isActive={location.pathname === item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === item.href}
+                  >
                     <Link to={item.href} className="flex items-center gap-2">
                       <item.icon className="h-4 w-4" />
                       <span>{item.name}</span>
@@ -82,10 +87,10 @@ export default function Layout() {
               ))}
             </SidebarMenu>
           </SidebarContent>
-          
+
           <SidebarFooter className="border-t border-sidebar-border p-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={signOut}
               className="w-full justify-start text-sidebar-foreground hover:text-sidebar-accent-foreground"
             >
@@ -94,7 +99,7 @@ export default function Layout() {
             </Button>
           </SidebarFooter>
         </Sidebar>
-        
+
         <main className="flex-1 flex flex-col">
           <header className="border-b border-border bg-card p-4">
             <div className="flex items-center justify-between">
@@ -104,7 +109,7 @@ export default function Layout() {
               </h1>
             </div>
           </header>
-          
+
           <div className="flex-1 p-6">
             <Outlet />
           </div>

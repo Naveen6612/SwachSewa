@@ -1,18 +1,25 @@
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/hooks/useAuth';
-import { Leaf, Recycle } from 'lucide-react';
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/hooks/useAuth";
+import { Leaf, Recycle } from "lucide-react";
 
 export default function Auth() {
   const { user, signIn, signUp, loading } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   if (loading) {
@@ -52,14 +59,17 @@ export default function Auth() {
             <Recycle className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-foreground">Green Factory</h1>
-          <p className="text-muted-foreground mt-2">Comprehensive Waste Management System</p>
+          <p className="text-muted-foreground mt-2">
+            Comprehensive Waste Management System
+          </p>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle>Welcome</CardTitle>
             <CardDescription>
-              Sign in to your account or create a new one to get started with waste management training.
+              Sign in to your account or create a new one to get started with
+              waste management training.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -68,7 +78,7 @@ export default function Auth() {
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="signin">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
@@ -92,11 +102,11 @@ export default function Auth() {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Signing In...' : 'Sign In'}
+                    {isLoading ? "Signing In..." : "Sign In"}
                   </Button>
                 </form>
               </TabsContent>
-              
+
               <TabsContent value="signup">
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
@@ -131,7 +141,7 @@ export default function Auth() {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                    {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>
@@ -139,7 +149,8 @@ export default function Auth() {
           </CardContent>
           <CardFooter className="text-center">
             <p className="text-sm text-muted-foreground">
-              By signing up, you agree to participate in mandatory waste management training.
+              By signing up, you agree to participate in mandatory waste
+              management training.
             </p>
           </CardFooter>
         </Card>
