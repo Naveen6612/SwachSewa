@@ -37,7 +37,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function fetchDashboardData() {
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       try {
         // Fetch user profile
@@ -105,67 +108,130 @@ export default function Dashboard() {
       <div className="bg-gradient-to-r from-primary to-accent rounded-lg p-6 text-primary-foreground">
         <div className="flex items-center gap-3 mb-2">
           <Leaf className="h-8 w-8" />
-          <h1 className="text-2xl font-bold">Welcome back, {profile?.full_name}!</h1>
+          <h1 className="text-2xl font-bold">
+            {user ? `Welcome back, ${profile?.full_name || 'User'}!` : 'Welcome to Swach Sewa!'}
+          </h1>
         </div>
-        <p className="text-primary-foreground/90">
-          Your role: <Badge variant="secondary" className="ml-2">{profile?.role}</Badge>
-        </p>
-        {!profile?.is_verified && (
-          <div className="mt-4 flex items-center gap-2 text-warning-foreground bg-warning/20 rounded-lg p-3">
-            <AlertTriangle className="h-5 w-5" />
-            <span>Complete your mandatory training to get verified!</span>
+        {user ? (
+          <>
+            <p className="text-primary-foreground/90">
+              Your role: <Badge variant="secondary" className="ml-2">{profile?.role}</Badge>
+            </p>
+            {!profile?.is_verified && (
+              <div className="mt-4 flex items-center gap-2 text-warning-foreground bg-warning/20 rounded-lg p-3">
+                <AlertTriangle className="h-5 w-5" />
+                <span>Complete your mandatory training to get verified!</span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-primary-foreground/90">
+              Join our community to track your progress, earn rewards, and make a difference!
+            </p>
+            <div className="flex gap-3">
+              <Button asChild variant="secondary" size="sm">
+                <Link to="/auth">Sign In</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
+                <Link to="/auth">Sign Up</Link>
+              </Button>
+            </div>
           </div>
         )}
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Training Progress</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{trainingProgress.completed}/{trainingProgress.total}</div>
-            <Progress value={trainingPercentage} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              {Math.round(trainingPercentage)}% complete
-            </p>
-          </CardContent>
-        </Card>
+      {user ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Training Progress</CardTitle>
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{trainingProgress.completed}/{trainingProgress.total}</div>
+              <Progress value={trainingPercentage} className="mt-2" />
+              <p className="text-xs text-muted-foreground mt-2">
+                {Math.round(trainingPercentage)}% complete
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Incentive Points</CardTitle>
-            <Trophy className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">{incentivePoints}</div>
-            <p className="text-xs text-muted-foreground">
-              Earned through participation
-            </p>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Incentive Points</CardTitle>
+              <Trophy className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-success">{incentivePoints}</div>
+              <p className="text-xs text-muted-foreground">
+                Earned through participation
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Verification Status</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {profile?.is_verified ? (
-                <span className="text-success">Verified</span>
-              ) : (
-                <span className="text-warning">Pending</span>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Complete training to verify
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Verification Status</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {profile?.is_verified ? (
+                  <span className="text-success">Verified</span>
+                ) : (
+                  <span className="text-warning">Pending</span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Complete training to verify
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Training Modules</CardTitle>
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">5+</div>
+              <p className="text-xs text-muted-foreground">
+                Learn waste management techniques
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Waste Facilities</CardTitle>
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">50+</div>
+              <p className="text-xs text-muted-foreground">
+                Find collection centers near you
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Community Impact</CardTitle>
+              <Recycle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">1000+</div>
+              <p className="text-xs text-muted-foreground">
+                Reports submitted by users
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

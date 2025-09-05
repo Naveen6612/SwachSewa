@@ -50,9 +50,7 @@ export default function Layout() {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
+  // Allow access without authentication
 
   return (
     <SidebarProvider>
@@ -89,14 +87,33 @@ export default function Layout() {
           </SidebarContent>
 
           <SidebarFooter className="border-t border-sidebar-border p-4">
-            <Button
-              variant="ghost"
-              onClick={signOut}
-              className="w-full justify-start text-sidebar-foreground hover:text-sidebar-accent-foreground"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
+            {user ? (
+              <Button
+                variant="ghost"
+                onClick={signOut}
+                className="w-full justify-start text-sidebar-foreground hover:text-sidebar-accent-foreground"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            ) : (
+              <div className="space-y-2">
+                <Button
+                  asChild
+                  variant="default"
+                  className="w-full"
+                >
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full"
+                >
+                  <Link to="/auth">Sign Up</Link>
+                </Button>
+              </div>
+            )}
           </SidebarFooter>
         </Sidebar>
 
