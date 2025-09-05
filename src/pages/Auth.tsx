@@ -58,7 +58,7 @@ export default function Auth() {
             </div>
             <Recycle className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Green Factory</h1>
+          <h1 className="text-3xl font-bold text-foreground">Swach Sewa</h1>
           <p className="text-muted-foreground mt-2">
             Comprehensive Waste Management System
           </p>
