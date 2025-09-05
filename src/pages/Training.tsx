@@ -40,38 +40,38 @@ export default function Training() {
 
   useEffect(() => {
     async function fetchTrainingData() {
-      if (!user) return;
-
       try {
-        // Get user role
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
-
-        const role = profileData?.role || 'citizen';
-        setUserRole(role);
-
-        // Fetch training modules for user's role
+        // Always fetch all training modules to show them
         const { data: modulesData } = await supabase
           .from('training_modules')
           .select('*')
-          .eq('target_role', role)
           .order('created_at');
 
         if (modulesData) {
           setModules(modulesData);
         }
 
-        // Fetch user's progress
-        const { data: progressData } = await supabase
-          .from('training_progress')
-          .select('*')
-          .eq('user_id', user.id);
+        // Only fetch user-specific data if logged in
+        if (user) {
+          // Get user role
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('user_id', user.id)
+            .single();
 
-        if (progressData) {
-          setProgress(progressData);
+          const role = profileData?.role || 'citizen';
+          setUserRole(role);
+
+          // Fetch user's progress
+          const { data: progressData } = await supabase
+            .from('training_progress')
+            .select('*')
+            .eq('user_id', user.id);
+
+          if (progressData) {
+            setProgress(progressData);
+          }
         }
       } catch (error) {
         console.error('Error fetching training data:', error);
@@ -219,26 +219,43 @@ export default function Training() {
       </div>
 
       {/* Progress Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            Training Progress
-          </CardTitle>
-          <CardDescription>
-            Your overall progress through the training curriculum
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Completed: {completedModules}/{modules.length} modules</span>
-              <span>{Math.round(progressPercentage)}%</span>
+      {user && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5" />
+              Training Progress
+            </CardTitle>
+            <CardDescription>
+              Your overall progress through the training curriculum
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Completed: {completedModules}/{modules.length} modules</span>
+                <span>{Math.round(progressPercentage)}%</span>
+              </div>
+              <Progress value={progressPercentage} className="h-2" />
             </div>
-            <Progress value={progressPercentage} className="h-2" />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
+
+      {!user && (
+        <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+          <CardContent className="text-center py-8">
+            <BookOpen className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Sign up to track your progress</h3>
+            <p className="text-muted-foreground mb-4">
+              Create an account to save your training progress and earn rewards.
+            </p>
+            <Button asChild>
+              <a href="/auth">Get Started</a>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Training Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -282,30 +299,40 @@ export default function Training() {
                     </p>
                   )}
 
-                  <div className="flex gap-2">
-                    {!moduleProgress || moduleProgress.status === 'not_started' ? (
-                      <Button 
-                        onClick={() => startModule(module.id)}
-                        className="flex items-center gap-2"
-                      >
-                        <PlayCircle className="h-4 w-4" />
-                        Start Training
-                      </Button>
-                    ) : isInProgress ? (
-                      <Button 
-                        onClick={() => completeModule(module.id)}
-                        className="flex items-center gap-2"
-                      >
-                        <CheckCircle className="h-4 w-4" />
-                        Complete Training
-                      </Button>
-                    ) : (
-                      <Button variant="outline" disabled>
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Completed
-                      </Button>
-                    )}
-                  </div>
+                   <div className="flex gap-2">
+                     {!user ? (
+                       <Button 
+                         asChild
+                         className="flex items-center gap-2"
+                       >
+                         <a href="/auth">
+                           <PlayCircle className="h-4 w-4" />
+                           Sign up to access
+                         </a>
+                       </Button>
+                     ) : !moduleProgress || moduleProgress.status === 'not_started' ? (
+                       <Button 
+                         onClick={() => startModule(module.id)}
+                         className="flex items-center gap-2"
+                       >
+                         <PlayCircle className="h-4 w-4" />
+                         Start Training
+                       </Button>
+                     ) : isInProgress ? (
+                       <Button 
+                         onClick={() => completeModule(module.id)}
+                         className="flex items-center gap-2"
+                       >
+                         <CheckCircle className="h-4 w-4" />
+                         Complete Training
+                       </Button>
+                     ) : (
+                       <Button variant="outline" disabled>
+                         <CheckCircle className="h-4 w-4 mr-2" />
+                         Completed
+                       </Button>
+                     )}
+                   </div>
                 </div>
               </CardContent>
             </Card>
