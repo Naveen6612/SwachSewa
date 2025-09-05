@@ -24,7 +24,10 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchProfile() {
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const { data } = await supabase
@@ -86,6 +89,31 @@ export default function Profile() {
     return <div className="flex items-center justify-center h-64">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
     </div>;
+  }
+
+  // Show signup prompt for unauthenticated users
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Profile Settings</h1>
+          <p className="text-muted-foreground mt-1">Manage your account information</p>
+        </div>
+
+        <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+          <CardContent className="text-center py-12">
+            <User className="h-16 w-16 text-primary mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold mb-2">Sign up to view your profile</h3>
+            <p className="text-muted-foreground mb-6">
+              Create an account to manage your personal information and track your progress.
+            </p>
+            <Button asChild size="lg">
+              <a href="/auth">Get Started</a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
